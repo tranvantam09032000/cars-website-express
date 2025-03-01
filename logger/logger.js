@@ -1,8 +1,9 @@
 const winston = require("winston");
 
+
 const consoleLogFormat = winston.format.combine(
     winston.format.colorize(),
-    winston.format.printf(({ level, message, timestamp }) => {
+    winston.format.printf(({level, message, timestamp}) => {
         return `${level}: ${message}`;
     })
 );
@@ -15,8 +16,8 @@ const logger = winston.createLogger({
     ),
     transports: [
         new winston.transports.Console({format: consoleLogFormat}),
-        new winston.transports.File({ filename: "logs/error.log", level: "error" }),
-        new winston.transports.File({ filename: "logs/combined.log" }),
+        new winston.transports.File({filename: "logs/error.log", level: "error"}),
+        new winston.transports.File({filename: "logs/combined.log"}),
     ],
 });
 
