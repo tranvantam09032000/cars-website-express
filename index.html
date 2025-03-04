@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Realtime Chat with Socket.IO</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #messages { list-style: none; padding: 0; }
+        #messages li { padding: 5px 10px; border-bottom: 1px solid #ddd; }
+        #messageInput { width: 80%; padding: 10px; }
+        #sendButton { padding: 10px; }
+    </style>
+</head>
+<body>
+<h2>Realtime Chat</h2>
+<ul id="messages"></ul>
+<input id="messageInput" placeholder="Type a message..." autocomplete="off" />
+<button id="sendButton">Send</button>
+
+<!-- Thêm file client-side của Socket.IO -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    // Lắng nghe sự kiện chatMessage từ server
+    socket.on("chatMessage", (msg) => {
+        const li = document.createElement("li");
+        li.textContent = msg;
+        document.getElementById("messages").appendChild(li);
+    });
+
+    // Gửi tin nhắn
+    document.getElementById("sendButton").addEventListener("click", () => {
+        const input = document.getElementById("messageInput");
+        if (input.value.trim()) {
+            socket.emit("chatMessage", input.value);
+            input.value = "";
+        }
+    });
+
+    // Cho phép gửi tin nhắn khi nhấn Enter
+    document.getElementById("messageInput").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            document.getElementById("sendButton").click();
+        }
+    });
+</script>
+</body>
+</html>
